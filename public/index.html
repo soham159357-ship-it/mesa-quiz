@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MESA Technical Quiz 2026</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bp:#0c2a57;--bp2:#113668;--grid:rgba(150,195,255,.10);--line:#c9dcff;--ink:#eef4ff;--dim:#8cadde;--or:#ff7a1a;--gr:#3fc26b;--bad:#ff5f5f;
+--disp:'Barlow Condensed','Arial Narrow',sans-serif;--body:'Barlow',system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--bp);color:var(--ink);font:17px/1.45 var(--body);min-height:100vh;
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(rgba(150,195,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(150,195,255,.06) 1px,transparent 1px);
+background-size:120px 120px,120px 120px,24px 24px,24px 24px}
+.frame{position:fixed;inset:10px;border:2px solid var(--line);pointer-events:none;z-index:5}
+.frame::after{content:"";position:absolute;inset:5px;border:1px solid rgba(201,220,255,.35)}
+.page{max-width:900px;margin:0 auto;padding:34px 28px 120px}
+header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+header img{height:64px;background:#f6f1e7;padding:5px 8px;border-radius:3px}
+h1{font:700 clamp(30px,6vw,52px)/.95 var(--disp);margin:0;letter-spacing:.01em}
+.sub{color:var(--dim);margin-top:4px}
+nav{margin-left:auto;display:flex;gap:4px}
+nav a{color:var(--dim);text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent;font-weight:500}
+nav a.on,nav a:hover{color:var(--ink);border-color:var(--or)}
+.sheet{border:1.5px solid var(--line);background:rgba(8,30,66,.72);padding:24px;position:relative;margin-bottom:18px}
+.sheet::before,.sheet::after{content:"";position:absolute;width:14px;height:14px;border:3px solid var(--or)}
+.sheet::before{top:-3px;left:-3px;border-right:0;border-bottom:0}.sheet::after{bottom:-3px;right:-3px;border-left:0;border-top:0}
+h2{font:600 28px/1.1 var(--disp);margin:0 0 14px;letter-spacing:.02em}
+label{display:block;color:var(--dim);font-size:14px;margin:0 0 5px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:#08214a;border:1.5px solid #3b66a8;padding:11px 12px;border-radius:2px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.f{margin-bottom:16px}.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+button{font:600 18px var(--disp);letter-spacing:.04em;cursor:pointer;color:var(--ink);background:transparent;border:1.5px solid var(--line);padding:11px 20px;border-radius:2px}
+button:hover{background:rgba(201,220,255,.12)}
+button.go{background:var(--or);border-color:var(--or);color:#1a0d00;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding-right:30px}
+button.go:hover{background:#ff9242}button:disabled{opacity:.4;cursor:default}button.bad{border-color:var(--bad);color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.mu{color:var(--dim);font-size:15px}
+.lamp{display:inline-block;width:10px;height:10px;border-radius:50%;background:#4a6a9e;margin-right:8px}.lamp.on{background:var(--gr);box-shadow:0 0 10px var(--gr)}
+.err{color:var(--bad);margin-top:10px;min-height:22px}
+/* question */
+.qwrap{display:grid;grid-template-columns:170px 1fr;gap:26px;align-items:start}
+.dial{position:relative;width:160px;height:160px}.dial svg{width:100%;height:100%}
+.dial b{position:absolute;inset:0;display:grid;place-items:center;font:700 52px var(--disp)}
+.dial.low b{color:var(--bad);animation:pulse .6s infinite alternate}@keyframes pulse{to{opacity:.45}}
+.qmeta{color:var(--dim);margin-bottom:6px}
+.qtext{font:600 clamp(24px,4vw,32px)/1.18 var(--disp);margin:0 0 18px;letter-spacing:.01em}
+.opt{display:flex;gap:14px;align-items:center;width:100%;text-align:left;font:500 19px var(--body);letter-spacing:0;padding:12px 14px;margin-bottom:10px;border-width:1.5px}
+.opt i{flex:none;width:34px;height:34px;border:1.5px solid var(--or);border-radius:50%;display:grid;place-items:center;font:700 20px var(--disp);color:var(--or);font-style:normal}
+.opt:hover:not(:disabled){background:rgba(255,122,26,.12);border-color:var(--or)}
+.opt.picked{background:rgba(255,122,26,.2);border-color:var(--or)}
+.stamp{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-7deg) scale(1);border:5px solid;padding:8px 26px;font:700 clamp(40px,10vw,84px)/1 var(--disp);background:rgba(8,30,66,.94);z-index:9;animation:slam .28s cubic-bezier(.2,1.6,.4,1)}
+@keyframes slam{from{transform:translate(-50%,-50%) rotate(-7deg) scale(2.2);opacity:0}}
+.stamp.ok{color:var(--gr);border-color:var(--gr)}.stamp.no{color:var(--bad);border-color:var(--bad)}.stamp.zero{color:var(--dim);border-color:var(--dim)}
+.big{font:700 clamp(64px,16vw,120px)/1 var(--disp);color:var(--or)}
+/* tables */
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #3b66a8;padding:9px 12px;text-align:center;white-space:nowrap}
+th{font:600 17px var(--disp);letter-spacing:.04em}
+th{background:#0a2a5c}td:nth-child(2),th:nth-child(2){text-align:left}
+tr.top td{background:rgba(255,122,26,.14)}td.tot{font:700 22px var(--disp);color:var(--or)}
+/* host */
+.q{border-top:1px dashed #3b66a8;padding-top:14px;margin-top:14px}
+.ro{display:flex;gap:10px;align-items:center;margin-top:7px}.ro input[type=radio]{width:auto;accent-color:var(--or)}
+.tb{position:fixed;right:22px;bottom:22px;z-index:6;display:grid;grid-template-columns:auto auto auto;border:1.5px solid var(--line);background:var(--bp);font-size:14px}
+.tb div{padding:5px 12px;border-right:1px solid var(--line);border-top:1px solid var(--line)}.tb div:nth-child(3n){border-right:0}
+.tb .h{color:var(--dim);font-size:12px;border-top:0}.tb .w{grid-column:1/-1;border-right:0;font:700 17px var(--disp);letter-spacing:.05em;background:rgba(255,122,26,.16)}
+@media(max-width:700px){.qwrap{grid-template-columns:1fr}.dial{margin:0 auto}.tb{display:none}nav{margin-left:0;width:100%}.page{padding:24px 16px 60px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="frame"></div>
+<div class="page">
+  <header>
+    <img src="logo.png" alt="MESA logo">
+    <div><h1>MESA Technical Quiz 2026</h1><div class="sub">Mechanical Engineering Student Association</div></div>
+    <nav id="nav"></nav>
+  </header>
+  <div id="app"></div>
+</div>
+<div class="tb" id="tb"></div>
 
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let HT=sessionStorage.getItem('ht')||'',me=JSON.parse(sessionStorage.getItem('me')||'null'),timers=[];
+const clear=()=>{timers.forEach(t=>{clearInterval(t);clearTimeout(t)});timers=[]};
+async function api(p,b,tok){
+  const r=await fetch('/api/'+p,{method:b?'POST':'GET',headers:{'content-type':'application/json','x-token':tok||''},body:b?JSON.stringify(b):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('Error '+r.status));return j;
+}
+function titleBlock(team,round,q){
+  $('#tb').innerHTML=`<div class="w">MESA Technical Quiz 2026</div><div class="h">Team</div><div class="h">Round</div><div class="h">Question</div><div>${esc(team||'-')}</div><div>${round||'-'}</div><div>${q||'-'}</div>`;
+}
+function route(){
+  clear();const h=location.hash||'#/';
+  $('#nav').innerHTML=[['#/','Play'],['#/board','Leaderboard'],['#/host','Host']].map(([k,l])=>`<a href="${k}" class="${h===k?'on':''}">${l}</a>`).join('');
+  titleBlock(me&&me.name,'','');
+  if(h==='#/board')board();else if(h==='#/host')host();else join();
+}
+addEventListener('hashchange',route);
+
+/* ================= PLAYER ================= */
+async function join(){
+  const app=$('#app');
+  let info;try{info=await api('info')}catch(e){app.innerHTML='<div class="sheet">Cannot reach the server. Refresh the page.</div>';return}
+  if(!info.ready){app.innerHTML='<div class="sheet"><h2>Quiz not ready</h2><p class="mu">The host is still setting up. This page will update by itself.</p></div>';timers.push(setTimeout(route,4000));return}
+  if(me){return play()}
+  app.innerHTML=`<div class="sheet"><h2>Report to the arena</h2>
+  <div class="f"><label>Your team</label><select id="jt">${info.teams.map((n,i)=>`<option value="${i}">${esc(n)}</option>`).join('')}</select></div>
+  <div class="f"><label>Team code (the host gives you this)</label><input id="jp" inputmode="numeric" maxlength="6" autocomplete="off"></div>
+  <p class="mu"><span class="lamp ${info.active?'on':''}"></span>${info.active?'Round '+info.active+' is open':'No round is open yet'}. Correct answer ${info.pts>0?'+':''}${info.pts}, wrong answer ${info.neg}, no answer 0. ${info.timer} seconds per question.</p>
+  <button class="go" id="jg">Join</button><div class="err" id="je"></div></div>`;
+  $('#jg').onclick=async()=>{
+    const team=+$('#jt').value,pin=$('#jp').value.trim();
+    try{await api('play',{team,pin});me={team,pin,name:info.teams[team]};sessionStorage.setItem('me',JSON.stringify(me));route()}
+    catch(e){$('#je').textContent=e.message}
+  };
+}
+async function play(begin){
+  const app=$('#app');clear();
+  let d;try{d=await api('play',{team:me.team,pin:me.pin,begin:!!begin})}
+  catch(e){if(/code/i.test(e.message)){me=null;sessionStorage.removeItem('me');route()}else{app.innerHTML=`<div class="sheet">${esc(e.message)}</div>`;timers.push(setTimeout(play,3000))}return}
+  const poll=()=>timers.push(setTimeout(()=>play(false),3000));
+  const leave=`<button id="lv">Switch team</button>`;
+  const bindLeave=()=>{$('#lv').onclick=()=>{me=null;sessionStorage.removeItem('me');route()}};
+  if(d.wait){titleBlock(me.name,'','');app.innerHTML=`<div class="sheet"><h2>${esc(me.name)}, stand by</h2><p class="mu"><span class="lamp"></span>No round is open. This screen moves on as soon as the host opens one.</p>${leave}</div>`;bindLeave();poll();return}
+  if(d.ready){titleBlock(me.name,d.round,'');app.innerHTML=`<div class="sheet"><h2>Round ${d.round} is open</h2><p class="mu"><span class="lamp on"></span>${d.count} questions. The clock starts on the first question the moment you press Start.</p><div class="row"><button class="go" id="st">Start round ${d.round}</button>${leave}</div></div>`;$('#st').onclick=()=>play(true);bindLeave();poll();return}
+  if(d.done){titleBlock(me.name,d.round,'');app.innerHTML=`<div class="sheet"><h2>Round ${d.round} complete</h2><div class="big">${d.score}</div><p class="mu">points in this round. Wait for the host to open the next round.</p>${leave}</div>`;bindLeave();poll();return}
+  // question
+  titleBlock(me.name,d.round,d.q+' of '+d.of);
+  let locked=false;const end=Date.now()+d.left;
+  app.innerHTML=`<div class="sheet"><div class="qwrap"><div class="dial" id="dial"><svg viewBox="0 0 120 120"><g id="ticks"></g><circle cx="60" cy="60" r="48" fill="none" stroke="#1d4a8c" stroke-width="7"/><circle id="arc" cx="60" cy="60" r="48" fill="none" stroke="#ff7a1a" stroke-width="7" stroke-dasharray="301.6" transform="rotate(-90 60 60)"/></svg><b id="num">${Math.ceil(d.left/1000)}</b></div>
+  <div><div class="qmeta">Round ${d.round}, question ${d.q} of ${d.of}. Round score: ${d.score}</div><p class="qtext">${esc(d.text)}</p>
+  ${d.opts.map((o,i)=>`<button class="opt" data-i="${i}"><i>${'ABCD'[i]}</i>${esc(o)}</button>`).join('')}
+  <button id="skip" style="margin-top:6px">Skip, no answer</button></div></div></div>`;
+  let tk='';for(let i=0;i<60;i++){const a=i*6*Math.PI/180,r1=i%5?55:52,x=60+Math.sin(a)*58,y=60-Math.cos(a)*58;tk+=`<line x1="${60+Math.sin(a)*r1}" y1="${60-Math.cos(a)*r1}" x2="${x}" y2="${y}" stroke="#8cadde" stroke-width="${i%5?.6:1.4}"/>`}
+  $('#ticks').innerHTML=tk;
+  async function send(choice,btn){
+    if(locked)return;locked=true;clear();document.querySelectorAll('.opt,#skip').forEach(b=>b.disabled=true);if(btn)btn.classList.add('picked');
+    let r;try{r=await api('answer',{team:me.team,pin:me.pin,q:d.q,choice})}catch(e){r={points:0,choice:-1}}
+    const cls=r.choice<0?'zero':(r.points>0?'ok':'no'),txt=r.choice<0?'No answer 0':(r.points>0?'Approved +'+r.points:'Rejected '+r.points);
+    const s=document.createElement('div');s.className='stamp '+cls;s.textContent=txt;document.body.appendChild(s);
+    setTimeout(()=>{s.remove();play(true)},1300);
+  }
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>send(+b.dataset.i,b));
+  $('#skip').onclick=()=>send(-1);
+  const tick=()=>{const left=Math.max(0,end-Date.now());$('#num').textContent=Math.ceil(left/1000);
+    $('#arc').style.strokeDashoffset=301.6*(1-left/d.total);$('#dial').classList.toggle('low',left<6000&&left>0);
+    if(left<=0)send(-1)};
+  tick();timers.push(setInterval(tick,200));
+}
+
+/* ================= LEADERBOARD ================= */
+async function board(){
+  const app=$('#app');
+  try{
+    const b=await api('board');
+    app.innerHTML=`<div class="sheet"><h2>Leaderboard</h2>${b.rows.length?`<div class="tw"><table><tr><th>Rank</th><th>Team</th>${Array.from({length:b.rounds},(_,i)=>`<th>R${i+1}</th>`).join('')}<th>Total</th></tr>
+    ${b.rows.map((r,i)=>`<tr class="${i===0&&r.total>0?'top':''}"><td>${i+1}</td><td>${esc(r.team)}</td>${Array.from({length:b.rounds},(_,k)=>`<td>${r.rounds[k+1]??'-'}</td>`).join('')}<td class="tot">${r.total}</td></tr>`).join('')}</table></div>`:'<p class="mu">No teams yet.</p>'}<p class="mu" style="margin-top:12px">Updates every few seconds.</p></div>`;
+  }catch(e){app.innerHTML=`<div class="sheet">${esc(e.message)}</div>`}
+  timers.push(setTimeout(()=>{if(location.hash==='#/board')board()},4000));
+}
+
+/* ================= HOST ================= */
+let H=null,draft={},edTeam=0,edMode=false;
+async function host(){
+  const app=$('#app');
+  if(!HT){app.innerHTML=`<div class="sheet"><h2>Host login</h2><div class="f"><label>Password</label><input id="hp" type="password"></div><button class="go" id="hl">Enter</button><div class="err" id="he"></div></div>`;
+    const go=async()=>{try{const r=await api('host/login',{password:$('#hp').value});HT=r.token;sessionStorage.setItem('ht',HT);host()}catch(e){$('#he').textContent=e.message}};
+    $('#hl').onclick=go;$('#hp').onkeydown=e=>{if(e.key==='Enter')go()};return}
+  try{H=await api('host/state',null,HT)}catch(e){HT='';sessionStorage.removeItem('ht');host();return}
+  const c=H.cfg||{rounds:4,qpr:3,teams:Array.from({length:6},(_,i)=>({name:'Team '+(i+1)})),timer:30,pts:4,neg:-1,questions:[],perTeam:false};
+  draft={};edTeam=0;edMode=false;(H.cfg?H.cfg.questions:[]).forEach(x=>draft[dk(x.t,x.r,x.q)]=x);
+  app.innerHTML=`
+  <div class="sheet"><h2>Run the game</h2>
+    <p class="mu"><span class="lamp ${H.active?'on':''}"></span>${H.active?'Round '+H.active+' is open':'No round is open'}. ${H.count} answers recorded.</p>
+    <div class="row" id="rr">${H.cfg?Array.from({length:c.rounds},(_,i)=>`<button data-r="${i+1}" class="${H.active===i+1?'go':''}">Open round ${i+1}</button>`).join('')+'<button data-r="0">Close rounds</button>':'<span class="mu">Save the quiz below first.</span>'}</div>
+    <div class="row" style="margin-top:16px"><button id="ex">Download results (Excel/CSV)</button><button id="rs" class="bad">Clear all results</button><button id="lo">Log out</button></div></div>
+  ${H.cfg?`<div class="sheet"><h2>Team codes</h2><p class="mu">Give each team its code. They need it to join.</p><div class="tw"><table><tr><th>Team</th><th>Code</th></tr>${H.cfg.teams.map(t=>`<tr><td>${esc(t.name)}</td><td class="tot">${esc(t.pin)}</td></tr>`).join('')}</table></div></div>`:''}
+  <div class="sheet"><h2>Quiz setup</h2><div class="g3">
+    <div class="f"><label>Rounds</label><input id="h_r" type="number" min="1" value="${c.rounds}"></div>
+    <div class="f"><label>Questions per round</label><input id="h_q" type="number" min="1" value="${c.qpr}"></div>
+    <div class="f"><label>Teams</label><input id="h_t" type="number" min="1" value="${c.teams.length}"></div>
+    <div class="f"><label>Seconds per question</label><input id="h_s" type="number" min="5" value="${c.timer}"></div>
+    <div class="f"><label>Points, correct</label><input id="h_p" type="number" value="${c.pts}"></div>
+    <div class="f"><label>Points, wrong</label><input id="h_n" type="number" value="${c.neg}"></div></div>
+    <div class="f"><label>Team names, one per line (blank lines become Team 1, Team 2…)</label><textarea id="h_names" rows="3">${esc(c.teams.map(t=>t.name).join('\n'))}</textarea></div>
+    <label style="display:flex;gap:10px;align-items:center;color:var(--ink)"><input type="checkbox" id="h_pt" style="width:auto" ${c.perTeam?'checked':''}>Give each team its own questions</label>
+    <div style="margin-top:14px"><button id="h_build">Build question sheet</button></div></div>
+  <div id="h_qs"></div>`;
+  $('#rr').querySelectorAll('button[data-r]').forEach(b=>b.onclick=async()=>{await api('host/active',{round:+b.dataset.r},HT);host()});
+  $('#lo').onclick=()=>{HT='';sessionStorage.removeItem('ht');host()};
+  $('#ex').onclick=async()=>{try{const r=await fetch('/api/host/csv',{headers:{'x-token':HT}});if(!r.ok)throw 0;const u=URL.createObjectURL(await r.blob()),a=document.createElement('a');a.href=u;a.download='mesa-quiz-results.csv';a.click()}catch(e){alert('Nothing to export yet.')}};
+  let armed=false;$('#rs').onclick=async e=>{if(!armed){armed=true;e.target.textContent='Press again to confirm';setTimeout(()=>{armed=false;e.target.textContent='Clear all results'},4000);return}await api('host/reset',{},HT);host()};
+  $('#h_build').onclick=()=>drawQs();drawQs();
+  timers.push(setInterval(async()=>{try{const s=await api('host/state',null,HT);H.active=s.active}catch(e){}},15000));
+}
+const dk=(t,r,q)=>t+'_'+r+'_'+q;
+function syncDraft(){document.querySelectorAll('#h_qs .q').forEach(d=>{const r=+d.dataset.r,q=+d.dataset.q,t=edMode?edTeam:-1;
+  draft[dk(t,r,q)]={t,r,q,text:d.querySelector('.qt').value.trim(),opts:[...d.querySelectorAll('.qo')].map(i=>i.value.trim()),c:+(d.querySelector('input[type=radio]:checked')?.value||0)}})}
+function formTeams(){const T=+$('#h_t').value||1,n=$('#h_names').value.split('\n').map(s=>s.trim()).filter(Boolean);return Array.from({length:T},(_,i)=>n[i]||('Team '+(i+1)))}
+function drawQs(skip){
+  if(!skip)syncDraft();
+  const R=+$('#h_r').value||1,Q=+$('#h_q').value||1,teams=formTeams(),pt=$('#h_pt').checked;
+  if(edTeam>=teams.length)edTeam=0;edMode=pt;const t=pt?edTeam:-1;
+  let h='<div class="sheet"><h2>Questions and correct answers</h2>';
+  h+=pt?`<div class="f"><label>Editing the question set for</label><select id="h_et">${teams.map((n,i)=>`<option value="${i}" ${i===edTeam?'selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="mu">Your edits are kept while you switch teams. Press Save quiz when every team is done.</p>`:'<p class="mu">All teams get these questions.</p>';
+  h+=`<details><summary class="mu" style="cursor:pointer">Bulk import from Excel</summary><p class="mu">Columns: team number (0 = all teams), round, question number, question, A, B, C, D, correct letter. Copy the cells in Excel and paste them here.</p><textarea id="h_bulk" rows="4"></textarea><div style="margin-top:8px"><button id="h_imp">Import rows</button></div></details>`;
+  for(let r=1;r<=R;r++){h+=`<h2 style="margin-top:22px">Round ${r}</h2>`;
+    for(let q=1;q<=Q;q++){const o=draft[dk(t,r,q)]||{text:'',opts:['','','',''],c:0};
+      h+=`<div class="q" data-r="${r}" data-q="${q}"><label>Question ${q}</label><input class="qt" value="${esc(o.text)}">${[0,1,2,3].map(i=>`<div class="ro"><input type="radio" name="c${r}_${q}" value="${i}" ${o.c===i?'checked':''} title="Mark as correct"><input class="qo" value="${esc(o.opts[i])}" placeholder="Option ${'ABCD'[i]}"></div>`).join('')}</div>`}}
+  h+='<div class="row" style="margin-top:20px"><button class="go" id="h_save">Save quiz</button><span class="mu" id="h_ok">Select the radio button next to the correct option.</span></div></div>';
+  $('#h_qs').innerHTML=h;$('#h_save').onclick=saveCfg;$('#h_imp').onclick=importRows;
+  if(pt)$('#h_et').onchange=e=>{syncDraft();edTeam=+e.target.value;drawQs(true)};
+}
+function importRows(){
+  syncDraft();let n=0,pt=false,mr=0,mq=0,mt=0;
+  $('#h_bulk').value.split('\n').forEach(l=>{const p=l.includes('\t')?l.split('\t'):l.split('|');if(p.length<9)return;
+    const tm=parseInt(p[0])||0,r=parseInt(p[1]),q=parseInt(p[2]),c='ABCD'.indexOf((p[8]||'').trim().toUpperCase());if(!(r>0&&q>0)||c<0)return;
+    const t=tm>0?tm-1:-1;if(t>=0)pt=true;draft[dk(t,r,q)]={t,r,q,text:p[3].trim(),opts:[4,5,6,7].map(i=>p[i].trim()),c};n++;mr=Math.max(mr,r);mq=Math.max(mq,q);mt=Math.max(mt,tm)});
+  if(pt)$('#h_pt').checked=true;if(mr>+$('#h_r').value)$('#h_r').value=mr;if(mq>+$('#h_q').value)$('#h_q').value=mq;if(mt>+$('#h_t').value)$('#h_t').value=mt;
+  drawQs(true);$('#h_ok').textContent='Imported '+n+' questions. Press Save quiz.';
+}
+async function saveCfg(){
+  syncDraft();const R=+$('#h_r').value,Q=+$('#h_q').value,teams=formTeams(),pt=$('#h_pt').checked,questions=[];
+  for(const t of(pt?teams.map((_,i)=>i):[-1]))for(let r=1;r<=R;r++)for(let q=1;q<=Q;q++){const x=draft[dk(t,r,q)];
+    if(!x||!x.text||x.opts.length<4||x.opts.some(o=>!o)){$('#h_ok').textContent='Incomplete: '+(t<0?'':teams[t]+', ')+'round '+r+', question '+q+'.';return}questions.push(x)}
+  try{await api('host/config',{cfg:{rounds:R,qpr:Q,teams,perTeam:pt,timer:+$('#h_s').value||30,pts:+$('#h_p').value,neg:+$('#h_n').value,questions}},HT);$('#h_ok').textContent='Saved. Reloading codes…';setTimeout(host,600)}
+  catch(e){$('#h_ok').textContent='Save failed: '+e.message}
+}
+route();
+</script>
+</body>
+</html>
